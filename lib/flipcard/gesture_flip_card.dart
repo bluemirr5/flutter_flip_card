@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import '../controllers/flip_card_controllers.dart';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
+import '../controllers/flip_card_controllers.dart';
 import '../modal/flip_side.dart';
 
 /// [GestureFlipCard]  A component that provides a gsture flip card animation
@@ -21,17 +22,20 @@ class GestureFlipCard extends StatefulWidget {
   /// [axis] The flip axis [Horizontal] and [Vertical]
   final FlipAxis axis;
 
+  final double perspective;
+
   /// [animationDuration] The amount of milliseconds a turn animation will take.
   final Duration animationDuration;
-  const GestureFlipCard(
-      {Key? key,
-      required this.frontWidget,
-      required this.backWidget,
-      this.enableController = false,
-      this.controller,
-      this.axis = FlipAxis.vertical,
-      this.animationDuration = const Duration(milliseconds: 800)})
-      : super(key: key);
+  const GestureFlipCard({
+    Key? key,
+    required this.frontWidget,
+    required this.backWidget,
+    this.enableController = false,
+    this.controller,
+    this.axis = FlipAxis.vertical,
+    this.animationDuration = const Duration(milliseconds: 800),
+    this.perspective = 0.001,
+  }) : super(key: key);
 
   @override
   FlipCardState1 createState() => FlipCardState1();
@@ -120,12 +124,12 @@ class FlipCardState1 extends State<GestureFlipCard>
 
     if (widget.axis == FlipAxis.horizontal) {
       transform = Matrix4.identity()
-        ..setEntry(3, 2, 0.001)
+        ..setEntry(3, 2, widget.perspective)
         ..rotateX(angle);
       transformForBack = Matrix4.identity()..rotateX(pi);
     } else {
       transform = Matrix4.identity()
-        ..setEntry(3, 2, 0.001)
+        ..setEntry(3, 2, widget.perspective)
         ..rotateY(angle);
       transformForBack = Matrix4.identity()..rotateY(pi);
     }
